@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -27,6 +28,11 @@ public class EventAdminController {
     @Autowired
     private IEventService eventService;
 
+
+    @GetMapping("/event")
+    public List<Event> getEvents() {
+        return eventService.getAll();
+    }
 
     @PostMapping(value = "/event",consumes = {
             MediaType.APPLICATION_JSON_VALUE,
@@ -70,8 +76,16 @@ public class EventAdminController {
         return eventService.updateEvent(id,userPrincipal,file,eventRequest1);
     }
 
+
+
     @GetMapping("/event/{id}")
     public EventDto getEventByID(@PathVariable("id") Long id) {
         return eventService.getEventById(id);
+    }
+
+    @DeleteMapping("/event/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteEvent(@PathVariable("id") Long id) {
+         eventService.deleteEvent(id);
     }
 }

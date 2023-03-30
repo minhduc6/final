@@ -27,7 +27,7 @@ public class Category {
 
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "category")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     private Set<EventCategory> eventCategories;
 
 

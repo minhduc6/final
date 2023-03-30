@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.Set;
 
 public interface EventCustomRepository {
-    List<Event> findEventBetweenDay(String from , String to, String address, Set<Long> cate);
+    List<Event> findEventFilter(String search ,String from , String to, String address, Set<Long> cate);
 }

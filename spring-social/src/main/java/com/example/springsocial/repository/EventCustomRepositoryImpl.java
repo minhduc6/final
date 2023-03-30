@@ -28,7 +28,7 @@ public class EventCustomRepositoryImpl implements EventCustomRepository {
 
 
     @Override
-    public List<Event> findEventBetweenDay(String from, String to,String address, Set<Long> cate) {
+    public List<Event> findEventFilter(String search ,String from, String to,String address, Set<Long> cate) {
         QEvent event = QEvent.event;
         QEventCategory eventCategory = QEventCategory.eventCategory;
         JPAQueryFactory query = new JPAQueryFactory(em);
@@ -44,6 +44,10 @@ public class EventCustomRepositoryImpl implements EventCustomRepository {
         if(address != null && !address.trim().isEmpty()){
             builder.and(event.address.eq(address));
         }
+        if(search != null && !search.trim().isEmpty()){
+            builder.and(event.name.like("%"+search+"%"));
+        }
+        builder.and(event.status.eq(1));
         return  query.selectFrom(event)
                 .innerJoin(event.eventCategories, eventCategory).where(builder).distinct().fetch();
     }

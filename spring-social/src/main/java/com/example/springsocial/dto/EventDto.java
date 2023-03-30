@@ -2,6 +2,7 @@ package com.example.springsocial.dto;
 
 import com.example.springsocial.model.Category;
 import com.example.springsocial.model.Event;
+import com.example.springsocial.model.Organizers;
 import com.example.springsocial.payload.TypeTicketRequest;
 import lombok.Data;
 
@@ -20,11 +21,15 @@ public class EventDto {
     private String name;
     private String description;
 
+    private String img;
+
     private String day;
     private String time;
     private String address;
     private Category category;
     private Integer status;
+
+    private Organizers organizers;
 
     private List<Category> categoryList;
 

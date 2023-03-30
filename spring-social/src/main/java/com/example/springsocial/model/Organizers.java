@@ -41,6 +41,7 @@ public class Organizers {
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "organizer")
+    @JsonIgnore
     private Set<Event> listEvent = new HashSet<>();
 
 

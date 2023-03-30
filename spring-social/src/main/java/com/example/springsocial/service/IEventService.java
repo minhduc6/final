@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface IEventService {
 
@@ -18,7 +19,9 @@ public interface IEventService {
      Event updateEvent(Long id ,UserPrincipal userPrincipal , MultipartFile multipartFile, EventRequest eventRequest);
      List<Event> getAll();
 
-     List<Event> retrieveFilms(EventSearchCriteria eventSearchCriteria);
+     void deleteEvent(Long id);
+
+     List<Event> getAllHomePage(String search ,String from, String to,String address, Set<Long> cate);
 
      EventDto getEventById(Long id);
 }

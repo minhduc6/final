@@ -70,7 +70,7 @@ public class IEventServiceImpl implements IEventService {
         if(multipartFile != null){
             event.setImg(FileUtil.uploadFile(multipartFile));
         }
-        event.setStatus(1);
+        event.setStatus(eventRequest.getStatus());
         event.setOrganizer(organizers);
         eventRepository.save(event);
 
@@ -84,16 +84,18 @@ public class IEventServiceImpl implements IEventService {
 	 	    eventCategoryRepository.save(eventCategory);
         }
 
-        for (int i = 0; i < eventRequest.getTicketList().size(); i++) {
-            TypeTicket typeTicket = TypeTicket.builder()
-                    .id(eventRequest.getTicketList().get(i).getId())
-                    .name(eventRequest.getTicketList().get(i).getName())
-                    .description(eventRequest.getTicketList().get(i).getDescription())
-                    .price(eventRequest.getTicketList().get(i).getPrice())
-                    .quantity(eventRequest.getTicketList().get(i).getQuantity())
-                    .status(eventRequest.getTicketList().get(i).getStatus())
-                    .event(event).build();
-            typeTicketRepository.save(typeTicket);
+        if(eventRequest.getTicketList() != null) {
+            for (int i = 0; i < eventRequest.getTicketList().size(); i++) {
+                TypeTicket typeTicket = TypeTicket.builder()
+                        .id(eventRequest.getTicketList().get(i).getId())
+                        .name(eventRequest.getTicketList().get(i).getName())
+                        .description(eventRequest.getTicketList().get(i).getDescription())
+                        .price(eventRequest.getTicketList().get(i).getPrice())
+                        .quantity(eventRequest.getTicketList().get(i).getQuantity())
+                        .status(eventRequest.getTicketList().get(i).getStatus())
+                        .event(event).build();
+                typeTicketRepository.save(typeTicket);
+            }
         }
         return event;
     }
@@ -118,7 +120,7 @@ public class IEventServiceImpl implements IEventService {
         if(multipartFile != null){
             event.setImg(FileUtil.uploadFile(multipartFile));
         }
-        event.setStatus(1);
+        event.setStatus(eventRequest.getStatus());
         event.setOrganizer(organizers);
         eventRepository.save(event);
 
@@ -153,14 +155,19 @@ public class IEventServiceImpl implements IEventService {
 
     @Override
     public List<Event> getAll() {
-       return null;
+       return eventRepository.findAll();
     }
 
     @Override
-    public List<Event> retrieveFilms(EventSearchCriteria eventSearchCriteria) {
-        Specification<Event> filmSpecifications = EventSpecifications.createEventSpecifications(eventSearchCriteria);
-        return eventRepository.findAll(filmSpecifications);
+    public void deleteEvent(Long id) {
+         eventRepository.deleteById(id);
     }
+
+    @Override
+    public List<Event> getAllHomePage(String search ,String from, String to,String address, Set<Long> cate) {
+        return  eventRepository.findEventFilter(search,from,to,address,cate);
+    }
+
 
     @Override
     public EventDto getEventById(Long id) {
@@ -172,8 +179,10 @@ public class IEventServiceImpl implements IEventService {
                 .stream()
                 .map(ticket -> modelMapper.map(ticket, TypeTicketRequest.class))
                 .collect(Collectors.toList());
+        Organizers organizers = organizersRepository.findById(event.getOrganizer().getId()).get();
         EventDto eventDto = modelMapper.map(event, EventDto.class);
         eventDto.setCategoryList(resultsWithSameIdAndName.get(event));
+        eventDto.setOrganizers(organizers);
         eventDto.setTypeTickets(ticketList);
         return  eventDto;
     }

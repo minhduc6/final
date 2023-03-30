@@ -1,6 +1,7 @@
 package com.example.springsocial.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,5 +32,7 @@ public class InvoiceDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id", nullable = false, insertable = false, updatable = false)
     private TypeTicket typeTicket;
+
+    private Integer quantity;
 
 }

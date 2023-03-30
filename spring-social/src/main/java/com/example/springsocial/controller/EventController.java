@@ -17,20 +17,21 @@ public class EventController {
     private IEventService iEventService;
 
     @GetMapping("/event")
-    public List<Event> getListEvent(@RequestParam(required = false) String from
+    public List<Event> getListEvent(
+            @RequestParam(required = false) String search
+            , @RequestParam(required = false) String from
             , @RequestParam(required = false) String to
             , @RequestParam(required = false) String address
             , @RequestParam(required = false) String... param) {
 
 
-        Set<String> set = new TreeSet<String>(Arrays.asList(param));
-        EventSearchCriteria searchCriteria = EventSearchCriteria.builder()
-                .fromTime(from)
-                .address(address)
-                .toTime(to).
-                categories(set).build();
-
-        return iEventService.retrieveFilms(searchCriteria);
+        Set<Long> set = new HashSet<>();
+        if(param != null){
+            for (int i = 0; i < param.length; i++) {
+                set.add(Long.parseLong(param[i]));
+            }
+        }
+        return iEventService.getAllHomePage(search,from,to,address,set);
     }
 
     @GetMapping("/event/{id}")

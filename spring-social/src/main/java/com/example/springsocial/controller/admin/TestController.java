@@ -1,19 +1,23 @@
 package com.example.springsocial.controller.admin;
 
 import com.example.springsocial.dto.EventDto;
+import com.example.springsocial.dto.SalesTicket;
+import com.example.springsocial.dto.StatisticalTicket;
 import com.example.springsocial.model.Category;
 import com.example.springsocial.model.Event;
 import com.example.springsocial.model.EventCategory;
 import com.example.springsocial.repository.EventCategoryRepository;
 import com.example.springsocial.repository.EventRepository;
+import com.example.springsocial.repository.InvoiceDetailRepository;
+import com.example.springsocial.service.ISendEmailService;
+import com.google.zxing.WriterException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +30,12 @@ public class TestController {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private ISendEmailService iSendEmailService;
+
+    @Autowired
+    private InvoiceDetailRepository invoiceDetailRepository;
 
 
 
@@ -43,12 +53,26 @@ public class TestController {
         eventDto.setCategoryList(resultsWithSameIdAndName.get(event));
         return  eventDto;
     }
+
     @GetMapping("/test/bet")
     @PreAuthorize("hasRole('ADMIN')")
-    @Transactional
-    public  List<Event>  getBeetween() {
+    public  String  getQrcode(@RequestParam String data) throws IOException, WriterException, MessagingException {
+       return  iSendEmailService.qrCode(data,"duc0611111@gmail.com",
+               "This is email body.",
+               "This email subject", "" +
+                       "qr-codes//image.png");
+    }
 
-       eventCategoryRepository.deleteAllByEvent_Id(1L);
-       return  null;
+
+    @GetMapping("/test/statistical/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<StatisticalTicket> getStatistical(@PathVariable Long id)  {
+        return  invoiceDetailRepository.statisticalTicket(id);
+    }
+
+    @GetMapping("/test/sales/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<SalesTicket> getSaleTicket(@PathVariable Long id)  {
+        return  invoiceDetailRepository.salesTicketEvent(id);
     }
 }

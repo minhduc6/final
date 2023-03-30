@@ -24,6 +24,12 @@ public class Invoice {
 
     private  Float amount;
 
+    private String nameRecv;
+
+    private String phoneRecv;
+
+    private String addressRecv;
+
     private  Integer status;
 
     @ManyToOne
