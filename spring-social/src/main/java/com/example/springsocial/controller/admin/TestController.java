@@ -1,11 +1,10 @@
 package com.example.springsocial.controller.admin;
 
-import com.example.springsocial.dto.EventDto;
-import com.example.springsocial.dto.SalesTicket;
-import com.example.springsocial.dto.StatisticalTicket;
+import com.example.springsocial.dto.*;
 import com.example.springsocial.model.Category;
 import com.example.springsocial.model.Event;
 import com.example.springsocial.model.EventCategory;
+import com.example.springsocial.model.InvoiceDetail;
 import com.example.springsocial.repository.EventCategoryRepository;
 import com.example.springsocial.repository.EventRepository;
 import com.example.springsocial.repository.InvoiceDetailRepository;
@@ -72,7 +71,7 @@ public class TestController {
 
     @GetMapping("/test/sales/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<SalesTicket> getSaleTicket(@PathVariable Long id)  {
-        return  invoiceDetailRepository.salesTicketEvent(id);
+    public List<MyTicketDTO> getSaleTicket(@PathVariable Long id)  {
+        return  invoiceDetailRepository.getTicketByInvoice(id);
     }
 }

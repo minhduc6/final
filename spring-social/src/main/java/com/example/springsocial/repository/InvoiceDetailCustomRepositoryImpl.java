@@ -1,8 +1,7 @@
 package com.example.springsocial.repository;
 
-import com.example.springsocial.dto.SalesTicket;
-import com.example.springsocial.dto.StatisticalTicket;
-import com.example.springsocial.model.Event;
+import com.example.springsocial.dto.*;
+import com.example.springsocial.model.InvoiceDetail;
 import com.example.springsocial.model.QInvoiceDetail;
 import com.example.springsocial.model.QTypeTicket;
 import com.querydsl.core.Tuple;
@@ -26,15 +25,15 @@ public class InvoiceDetailCustomRepositoryImpl implements InvoiceDetailCustomRep
         JPAQueryFactory query = new JPAQueryFactory(em);
         List<Tuple> tuples =  query.selectFrom(invoiceDetail)
                 .innerJoin(invoiceDetail.typeTicket,typeTicket)
-                .select(invoiceDetail.typeTicket.id,invoiceDetail.quantity.sum())
+                .select(invoiceDetail.typeTicket.name,invoiceDetail.count())
                 .groupBy(invoiceDetail.typeTicket.id)
                 .where(invoiceDetail.typeTicket.event.id.eq(id))
                 .fetch();
         List<StatisticalTicket> statisticalTickets = new ArrayList<>();
 
         for (int i = 0; i < tuples.size(); i++) {
-            Long row = (Long) tuples.get(i).toArray()[0];
-            Integer value = (Integer) tuples.get(i).toArray()[1];
+            String  row = (String) tuples.get(i).toArray()[0];
+            Long value = (Long) tuples.get(i).toArray()[1];
             StatisticalTicket statisticalTicket = new StatisticalTicket(row,value);
             statisticalTickets.add(statisticalTicket);
         }
@@ -49,7 +48,7 @@ public class InvoiceDetailCustomRepositoryImpl implements InvoiceDetailCustomRep
 
         List<Tuple> tuples = query.selectFrom(invoiceDetail)
                 .innerJoin(invoiceDetail.typeTicket,typeTicket)
-                .select(invoiceDetail.typeTicket.id,invoiceDetail.typeTicket.price,invoiceDetail.quantity.sum())
+                .select(invoiceDetail.typeTicket.id,invoiceDetail.typeTicket.price,invoiceDetail.count())
                 .groupBy(invoiceDetail.typeTicket.id)
                 .where(invoiceDetail.typeTicket.event.id.eq(id))
                 .fetch();
@@ -59,10 +58,59 @@ public class InvoiceDetailCustomRepositoryImpl implements InvoiceDetailCustomRep
         for (int i = 0; i < tuples.size(); i++) {
             Long row0 = (Long) tuples.get(i).toArray()[0];
             Float row1 = (Float) tuples.get(i).toArray()[1];
-            Integer row2 = (Integer) tuples.get(i).toArray()[2];
+            Long row2 = (Long) tuples.get(i).toArray()[2];
             SalesTicket salesTicket = new SalesTicket(row0,row2,row1,row1*row2);
             salesTickets.add(salesTicket);
         }
         return  salesTickets;
+    }
+
+    @Override
+    public InvoiceDTO detailInvoice(Long invoice_id) {
+        QInvoiceDetail invoiceDetail = QInvoiceDetail.invoiceDetail;
+        JPAQueryFactory query = new JPAQueryFactory(em);
+
+        List<Tuple> tuples = query.selectFrom(invoiceDetail)
+                .select(invoiceDetail.typeTicket.name,invoiceDetail.typeTicket.price,invoiceDetail.count())
+                .groupBy(invoiceDetail.typeTicket.id)
+                .where(invoiceDetail.id.invoiceId.eq(invoice_id))
+                .fetch();
+        List<DetailInvoice> detailInvoices = new ArrayList<>();
+
+        Float sum = 0f;
+        for (int i = 0; i < tuples.size(); i++) {
+            String row0 = (String) tuples.get(i).toArray()[0];
+            Float row1 = (Float) tuples.get(i).toArray()[1];
+            Long row2 = (Long) tuples.get(i).toArray()[2];
+            DetailInvoice detailInvoice = new DetailInvoice(row0,row1,row2);
+            detailInvoices.add(detailInvoice);
+            sum += row1*row2;
+        }
+        InvoiceDTO invoiceDTO = new InvoiceDTO(detailInvoices,sum);
+        invoiceDTO.setAmount(sum);
+        return invoiceDTO;
+    }
+
+    @Override
+    public List<MyTicketDTO> getTicketByInvoice(Long id) {
+        QInvoiceDetail invoiceDetail = QInvoiceDetail.invoiceDetail;
+        JPAQueryFactory query = new JPAQueryFactory(em);
+
+        List<Tuple> tuples = query.selectFrom(invoiceDetail)
+                .select(invoiceDetail.typeTicket.name,invoiceDetail.id.serialCode,invoiceDetail.typeTicket.price)
+                .where(invoiceDetail.id.invoiceId.eq(id))
+                .fetch();
+        System.out.println("Tuple : " + tuples);
+
+        List<MyTicketDTO> myTicketDTOList = new ArrayList<>();
+
+        for (int i = 0; i < tuples.size(); i++) {
+            String row0 = (String) tuples.get(i).toArray()[0];
+            String row1 = (String) tuples.get(i).toArray()[1];
+            Float row2 = (Float) tuples.get(i).toArray()[2];
+            MyTicketDTO myTicketDTO = new MyTicketDTO(row0,row1,row2);
+            myTicketDTOList.add(myTicketDTO);
+        }
+        return myTicketDTOList;
     }
 }

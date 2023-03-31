@@ -1,15 +1,16 @@
 package com.example.springsocial.controller.admin;
 
 
-import com.example.springsocial.dto.InvoiceDetailDto;
-import com.example.springsocial.model.Category;
+import com.example.springsocial.dto.InvoiceDTO;
 import com.example.springsocial.model.Invoice;
-import com.example.springsocial.model.InvoiceDetail;
 import com.example.springsocial.service.IInvoiceService;
+import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,17 @@ public class InvoiceAdminController {
 
     @GetMapping("/invoice/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<InvoiceDetailDto> getInvoiceDetailByID(@PathVariable Long id) {
+    public InvoiceDTO getInvoiceDetailByID(@PathVariable Long id) {
         return iInvoiceService.findByInvoiceId(id);
     }
+
+
+    @GetMapping("/sendMail/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void sendEmail(@PathVariable Long id,@RequestParam String email) throws MessagingException, IOException, WriterException {
+        System.out.println("Email :" + email);
+        System.out.println("LONG ID :" + id);
+        iInvoiceService.sendEmail(email,id);
+    }
+
 }

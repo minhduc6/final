@@ -1,5 +1,6 @@
 package com.example.springsocial.service;
 
+import com.example.springsocial.model.Category;
 import com.example.springsocial.model.Organizers;
 import com.example.springsocial.payload.OrganizerRequest;
 import org.springframework.web.multipart.MultipartFile;

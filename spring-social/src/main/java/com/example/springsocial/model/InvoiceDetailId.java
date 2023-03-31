@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Embeddable
 @Getter
@@ -24,4 +25,8 @@ public class InvoiceDetailId implements Serializable {
     @Column(name = "ticket_id", nullable = false)
     @EqualsAndHashCode.Include
     private Long ticketId;
+
+
+    @EqualsAndHashCode.Include
+    private String serialCode;
 }

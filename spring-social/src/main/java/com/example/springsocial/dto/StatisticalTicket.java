@@ -4,12 +4,12 @@ import lombok.Data;
 
 @Data
 public class StatisticalTicket {
-    private Long id;
+    private String name;
 
-    private Integer sumTicket;
+    private Long sumTicket;
 
-    public StatisticalTicket(Long id, Integer sumTicket) {
-        this.id = id;
+    public StatisticalTicket(String name, Long sumTicket) {
+        this.name = name;
         this.sumTicket = sumTicket;
     }
 }

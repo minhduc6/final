@@ -2,8 +2,8 @@ package com.example.springsocial.service.impl;
 
 
 import com.example.springsocial.exception.ResourceNotFoundException;
+import com.example.springsocial.model.Category;
 import com.example.springsocial.model.Organizers;
-import com.example.springsocial.model.User;
 import com.example.springsocial.payload.OrganizerRequest;
 import com.example.springsocial.repository.OrganizersRepository;
 import com.example.springsocial.service.IOrganizersService;
@@ -46,6 +46,7 @@ public class IOrganizersServiceImpl implements IOrganizersService {
         if(file != null){
             organizers.setImage(FileUtil.uploadFile(file));
         }
+        organizersRepository.save(organizers);
         return organizers;
     }
 
@@ -55,6 +56,6 @@ public class IOrganizersServiceImpl implements IOrganizersService {
                 () -> new ResourceNotFoundException("Organizers", "id", id)
         );
         organizersRepository.deleteById(id);
-        return  organizers;
+        return organizers;
     }
 }

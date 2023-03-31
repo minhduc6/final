@@ -1,6 +1,6 @@
 package com.example.springsocial.service.impl;
 
-
+import java.util.UUID;
 import com.example.springsocial.exception.BadRequestException;
 import com.example.springsocial.exception.ResourceNotFoundException;
 import com.example.springsocial.model.*;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+
 
 @Service
 public class IPaymentServiceImpl implements IPaymentService {
@@ -50,17 +51,17 @@ public class IPaymentServiceImpl implements IPaymentService {
             Long id = payRequest.getPayTicketRequestList().get(i).getId();
             TypeTicket typeTicket = typeTicketRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("Ticket", "id", id));
-            if (typeTicket.getQuantity() - payRequest.getPayTicketRequestList().get(i).getSoLuong()  < 0) {
+            if (typeTicket.getQuantity() - payRequest.getPayTicketRequestList().get(i).getSoLuong() < 0) {
                 throw new BadRequestException("Không đủ Số Lượng Vé");
             }
             typeTicket.setQuantity(typeTicket.getQuantity() - payRequest.getPayTicketRequestList().get(i).getSoLuong());
             typeTicketRepository.save(typeTicket);
-            InvoiceDetailId invoiceDetailId = InvoiceDetailId.builder().invoiceId(invoice.getId()).ticketId(typeTicket.getId()).build();
-            InvoiceDetail invoiceDetail = InvoiceDetail.builder().id(invoiceDetailId).invoice(invoice).typeTicket(typeTicket).quantity(payRequest.getPayTicketRequestList().get(i).getSoLuong()).build();
-            invoiceDetailRepository.save(invoiceDetail);
+            for (int j = 0; j < payRequest.getPayTicketRequestList().get(i).getSoLuong(); j++) {
+                InvoiceDetailId invoiceDetailId = InvoiceDetailId.builder().invoiceId(invoice.getId()).ticketId(typeTicket.getId()).serialCode(UUID.randomUUID().toString().replace("-","").substring(0,10)).build();
+                InvoiceDetail invoiceDetail = InvoiceDetail.builder().id(invoiceDetailId).invoice(invoice).typeTicket(typeTicket).build();
+                invoiceDetailRepository.save(invoiceDetail);
+            }
         }
-
-
         return invoice;
     }
 }

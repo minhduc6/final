@@ -24,7 +24,6 @@ public class EventController {
             , @RequestParam(required = false) String address
             , @RequestParam(required = false) String... param) {
 
-
         Set<Long> set = new HashSet<>();
         if(param != null){
             for (int i = 0; i < param.length; i++) {
@@ -32,6 +31,7 @@ public class EventController {
             }
         }
         return iEventService.getAllHomePage(search,from,to,address,set);
+
     }
 
     @GetMapping("/event/{id}")

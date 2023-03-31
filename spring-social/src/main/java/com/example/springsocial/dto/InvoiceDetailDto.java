@@ -11,5 +11,4 @@ public class InvoiceDetailDto {
 
     private TypeTicketDto typeTicket;
 
-    private Integer quantity;
 }

@@ -55,8 +55,8 @@ public class OrganizersAdminController {
 
     @DeleteMapping("/organizer/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteOrganizer(@PathVariable("id") Long id) {
-        iOrganizersService.deleteOrganizers(id);
+    public Organizers deleteOrganizer(@PathVariable("id") Long id) {
+        return  iOrganizersService.deleteOrganizers(id);
     }
 
 }

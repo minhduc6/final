@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @SuperBuilder
@@ -33,6 +34,6 @@ public class InvoiceDetail {
     @JoinColumn(name = "ticket_id", nullable = false, insertable = false, updatable = false)
     private TypeTicket typeTicket;
 
-    private Integer quantity;
+
 
 }
