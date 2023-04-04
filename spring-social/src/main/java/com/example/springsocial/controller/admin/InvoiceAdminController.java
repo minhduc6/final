@@ -19,6 +19,7 @@ public class InvoiceAdminController {
 
     @Autowired
     private IInvoiceService iInvoiceService;
+
     @GetMapping("/invoice")
     @PreAuthorize("hasRole('ADMIN')")
     public List<Invoice> getAllInvoice() {

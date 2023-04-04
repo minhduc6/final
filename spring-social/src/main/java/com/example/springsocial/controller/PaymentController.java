@@ -1,7 +1,7 @@
 package com.example.springsocial.controller;
 
+import com.example.springsocial.dto.MyTicketDTO;
 import com.example.springsocial.model.Invoice;
-import com.example.springsocial.payload.EventRequest;
 import com.example.springsocial.payload.PayRequest;
 import com.example.springsocial.security.CurrentUser;
 import com.example.springsocial.security.UserPrincipal;
@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -38,5 +39,17 @@ public class PaymentController {
         System.out.println("Payment Request String :" + payRequest);
         System.out.println("Payment Request :" + payRequest1.getPayTicketRequestList().size());
         return iPaymentService.payInvoice(userPrincipal,payRequest1);
+    }
+
+    @GetMapping("/myInvoice")
+    @PreAuthorize("hasRole('USER')")
+    public List<Invoice> getMyInvoice(@CurrentUser UserPrincipal userPrincipal) {
+        return iPaymentService.findInvoiceByUser(userPrincipal);
+    }
+
+    @GetMapping("/myInvoice/detail/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public List<MyTicketDTO> getMyInvoiceDetail(@PathVariable Long id) {
+        return iPaymentService.findByTicketByInvoice(id);
     }
 }

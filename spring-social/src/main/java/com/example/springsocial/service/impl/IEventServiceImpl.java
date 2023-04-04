@@ -55,7 +55,7 @@ public class IEventServiceImpl implements IEventService {
 
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
-        Organizers organizers = organizersRepository.findByUser(user)
+        Organizers organizers = organizersRepository.findByUser(Optional.ofNullable(user))
                 .orElseThrow(() -> new ResourceNotFoundException("Organizers", "user", user));
 
         Event event = new Event();
@@ -105,7 +105,7 @@ public class IEventServiceImpl implements IEventService {
     public Event updateEvent(Long id,UserPrincipal userPrincipal, MultipartFile multipartFile, EventRequest eventRequest) {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
-        Organizers organizers = organizersRepository.findByUser(user)
+        Organizers organizers = organizersRepository.findByUser(Optional.ofNullable(user))
                 .orElseThrow(() -> new ResourceNotFoundException("Organizers", "user", user));
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event", "id", id));

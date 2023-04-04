@@ -38,6 +38,7 @@ public class Organizers {
     private String city;
 
     private String ward;
+    private  String address;
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "organizer")

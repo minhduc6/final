@@ -1,7 +1,6 @@
 package com.example.springsocial.repository;
 
 import com.example.springsocial.dto.*;
-import com.example.springsocial.model.InvoiceDetail;
 import com.example.springsocial.model.QInvoiceDetail;
 import com.example.springsocial.model.QTypeTicket;
 import com.querydsl.core.Tuple;
@@ -80,12 +79,13 @@ public class InvoiceDetailCustomRepositoryImpl implements InvoiceDetailCustomRep
         Float sum = 0f;
         for (int i = 0; i < tuples.size(); i++) {
             String row0 = (String) tuples.get(i).toArray()[0];
-            Float row1 = (Float) tuples.get(i).toArray()[1];
-            Long row2 = (Long) tuples.get(i).toArray()[2];
-            DetailInvoice detailInvoice = new DetailInvoice(row0,row1,row2);
+            Float row2 = (Float) tuples.get(i).toArray()[1];
+            Long row3 = (Long) tuples.get(i).toArray()[2];
+            DetailInvoice detailInvoice = new DetailInvoice(row0,row2,row3);
             detailInvoices.add(detailInvoice);
-            sum += row1*row2;
+            sum += row2*row3;
         }
+        System.out.println("TUple : " + tuples);
         InvoiceDTO invoiceDTO = new InvoiceDTO(detailInvoices,sum);
         invoiceDTO.setAmount(sum);
         return invoiceDTO;
@@ -113,4 +113,6 @@ public class InvoiceDetailCustomRepositoryImpl implements InvoiceDetailCustomRep
         }
         return myTicketDTOList;
     }
+
+
 }

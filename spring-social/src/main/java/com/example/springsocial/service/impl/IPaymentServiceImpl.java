@@ -1,6 +1,9 @@
 package com.example.springsocial.service.impl;
 
+import java.util.List;
 import java.util.UUID;
+
+import com.example.springsocial.dto.MyTicketDTO;
 import com.example.springsocial.exception.BadRequestException;
 import com.example.springsocial.exception.ResourceNotFoundException;
 import com.example.springsocial.model.*;
@@ -63,5 +66,16 @@ public class IPaymentServiceImpl implements IPaymentService {
             }
         }
         return invoice;
+    }
+
+    @Override
+    public List<Invoice> findInvoiceByUser(UserPrincipal userPrincipal) {
+        User user = userRepository.findById(userPrincipal.getId()).get();
+        return invoiceRepository.findAllByUserOrder(user);
+    }
+
+    @Override
+    public List<MyTicketDTO> findByTicketByInvoice(Long id) {
+        return invoiceDetailRepository.getTicketByInvoice(id);
     }
 }

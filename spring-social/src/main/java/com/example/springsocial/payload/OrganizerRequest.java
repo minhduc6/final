@@ -22,4 +22,6 @@ public class OrganizerRequest {
 
     private String ward;
 
+    private String address;
+
 }
