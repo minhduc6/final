@@ -4,7 +4,6 @@ import com.example.springsocial.dto.*;
 import com.example.springsocial.model.Category;
 import com.example.springsocial.model.Event;
 import com.example.springsocial.model.EventCategory;
-import com.example.springsocial.model.InvoiceDetail;
 import com.example.springsocial.repository.EventCategoryRepository;
 import com.example.springsocial.repository.EventRepository;
 import com.example.springsocial.repository.InvoiceDetailRepository;
@@ -64,14 +63,12 @@ public class TestController {
 
 
     @GetMapping("/test/statistical/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<StatisticalTicket> getStatistical(@PathVariable Long id)  {
         return  invoiceDetailRepository.statisticalTicket(id);
     }
 
     @GetMapping("/test/sales/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<MyTicketDTO> getSaleTicket(@PathVariable Long id)  {
-        return  invoiceDetailRepository.getTicketByInvoice(id);
+    public List<SalesTicket> getSaleTicket(@PathVariable Long id)  {
+        return  invoiceDetailRepository.salesTicketEvent(id);
     }
 }

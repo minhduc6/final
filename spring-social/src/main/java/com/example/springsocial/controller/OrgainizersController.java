@@ -67,7 +67,6 @@ public class OrgainizersController {
     }
 
 
-
     @GetMapping("/eventByOrganizer")
     @PreAuthorize("hasRole('USER')")
     public List<Event> eventByOrganizers(@CurrentUser UserPrincipal userPrincipal) {
