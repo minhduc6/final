@@ -27,7 +27,7 @@ public final class FileUtil {
                 bytes = file.getBytes();
                 Files.write(Paths.get(FileUtil.folderPath + file.getOriginalFilename()), bytes);
             } catch (IOException e) {
-
+                System.out.println(e.getMessage());
             }
             String downloadUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/incoming-files/")

@@ -25,10 +25,8 @@ public class Category {
     @Column(name = "description")
     private String description;
 
-
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     private Set<EventCategory> eventCategories;
-
 
 }

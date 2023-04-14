@@ -36,14 +36,12 @@ public class Event {
     private LocalDateTime create_at;
     private LocalDateTime update_at;
 
-
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "event" ,orphanRemoval = true)
     private Set<TypeTicket> listTypeTicket = new HashSet<>();
 
-
     @JsonIgnore
-    @OneToMany( fetch = FetchType.EAGER, mappedBy = "event",orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "event",orphanRemoval = true)
     private Set<EventCategory> eventCategories = new HashSet<EventCategory>(0);
 
     @JsonIgnore

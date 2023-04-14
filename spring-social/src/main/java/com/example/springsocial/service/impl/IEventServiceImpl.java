@@ -125,7 +125,7 @@ public class IEventServiceImpl implements IEventService {
         eventRepository.save(event);
 
         List<EventCategory> categoryList = eventCategoryRepository.deleteAllByEvent(event);
-        List<TypeTicket> ticketList = typeTicketRepository.deleteTypeTicketByEvent(event);
+//        List<TypeTicket> ticketList = typeTicketRepository.deleteTypeTicketByEvent(event);
 
         for (int i = 0; i < eventRequest.getListCategory().size(); i++) {
             Long categoryId = eventRequest.getListCategory().get(i);
