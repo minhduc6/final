@@ -76,7 +76,9 @@ public class IUserServiceImpl implements IUserService {
         }
         user.setRoles(roles);
         user.setDisplayName(updateUser.getName());
-//        user.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+        if(updateUser.getPassword() != null && updateUser.getPassword().isEmpty() != true && updateUser.getPassword().isBlank() != true){
+            user.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+        }
         user.setEmail(updateUser.getEmail());
         return Optional.of(userRepository.save(user));
     }

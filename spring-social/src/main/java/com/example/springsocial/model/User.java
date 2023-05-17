@@ -62,5 +62,9 @@ public class User {
     @JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") })
     private Set<Role> roles;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user" ,orphanRemoval = true)
+    private Set<Blog> listBlog = new HashSet<>();
+
 
 }

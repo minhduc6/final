@@ -2,11 +2,13 @@ package com.example.springsocial.controller;
 
 import com.example.springsocial.exception.BadRequestException;
 import com.example.springsocial.model.AuthProvider;
+import com.example.springsocial.model.Role;
 import com.example.springsocial.model.User;
 import com.example.springsocial.payload.ApiResponse;
 import com.example.springsocial.payload.AuthResponse;
 import com.example.springsocial.payload.LoginRequest;
 import com.example.springsocial.payload.SignUpRequest;
+import com.example.springsocial.repository.RoleRepository;
 import com.example.springsocial.repository.UserRepository;
 import com.example.springsocial.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashSet;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,6 +34,9 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -68,6 +74,10 @@ public class AuthController {
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local.toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        HashSet<Role> roles = new HashSet<>();
+        roles.add(roleRepository.findByName("ROLE_USER"));
+        user.setEnabled(true);
+        user.setRoles(roles);
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
