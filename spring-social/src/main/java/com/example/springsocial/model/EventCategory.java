@@ -16,7 +16,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class EventCategory implements Serializable {
-
     @EmbeddedId
     @AttributeOverrides({
             @AttributeOverride(name = "eventId", column = @Column(name = "event_id", nullable = false)),

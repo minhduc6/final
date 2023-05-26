@@ -37,6 +37,4 @@ public class Blog {
     @JsonIgnore
     private User user;
 
-
-
 }
